@@ -32,6 +32,7 @@ interface SEOProps {
 // 从配置读取
 const SITE_URL = siteConfig.url
 const SITE_NAME = siteConfig.name
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
 // 根据分类生成相关关键词
 function generateKeywords(category: string, title: string): string[] {
@@ -50,7 +51,7 @@ export default function SEO({ article, breadcrumbs, faqs }: SEOProps) {
         canonical.rel = 'canonical'
         document.head.appendChild(canonical)
       }
-      canonical.href = `${SITE_URL}/notes/${article.slug}`
+      canonical.href = `${SITE_URL}${basePath}/notes/${article.slug}`
 
       // 更新 meta description
       let metaDesc = document.querySelector('meta[name="description"]') as HTMLMetaElement
@@ -75,13 +76,13 @@ export default function SEO({ article, breadcrumbs, faqs }: SEOProps) {
       const ogTags = [
         { property: 'og:title', content: `${article.title} | ${SITE_NAME}` },
         { property: 'og:description', content: article.description },
-        { property: 'og:url', content: `${SITE_URL}/notes/${article.slug}` },
+        { property: 'og:url', content: `${SITE_URL}${basePath}/notes/${article.slug}` },
         { property: 'og:type', content: 'article' },
       ]
       
       // 如果启用了 OG 图片
       if (siteConfig.seo.ogImage !== false) {
-        ogTags.push({ property: 'og:image', content: `${SITE_URL}/og-image.svg` })
+        ogTags.push({ property: 'og:image', content: `${SITE_URL}${basePath}/opengraph-image` })
       }
       
       ogTags.forEach(({ property, content }) => {
@@ -101,14 +102,14 @@ export default function SEO({ article, breadcrumbs, faqs }: SEOProps) {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: SITE_NAME,
-    url: SITE_URL,
+    url: `${SITE_URL}${basePath}`,
     description: siteConfig.description,
     inLanguage: siteConfig.advanced?.locale || 'zh-CN',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `${SITE_URL}/?q={search_term_string}`
+        urlTemplate: `${SITE_URL}${basePath}/?q={search_term_string}`
       },
       'query-input': 'required name=search_term_string'
     }
@@ -120,26 +121,26 @@ export default function SEO({ article, breadcrumbs, faqs }: SEOProps) {
     '@type': 'TechArticle',
     headline: article.title,
     description: article.description,
-    url: `${SITE_URL}/notes/${article.slug}`,
-    ...(siteConfig.seo.ogImage !== false ? { image: `${SITE_URL}/og-image.svg` } : {}),
+    url: `${SITE_URL}${basePath}/notes/${article.slug}`,
+    ...(siteConfig.seo.ogImage !== false ? { image: `${SITE_URL}${basePath}/opengraph-image` } : {}),
     author: {
       '@type': 'Organization',
       name: SITE_NAME,
-      url: SITE_URL
+      url: `${SITE_URL}${basePath}`
     },
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,
       logo: {
         '@type': 'ImageObject',
-        url: `${SITE_URL}/logo.svg`,
+        url: `${SITE_URL}${basePath}/logo.svg`,
         width: 60,
         height: 60
       }
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `${SITE_URL}/notes/${article.slug}`
+      '@id': `${SITE_URL}${basePath}/notes/${article.slug}`
     },
     articleSection: article.category,
     inLanguage: 'zh-CN',
@@ -186,7 +187,7 @@ export default function SEO({ article, breadcrumbs, faqs }: SEOProps) {
     provider: {
       '@type': 'Organization',
       name: SITE_NAME,
-      url: SITE_URL
+      url: `${SITE_URL}${basePath}`
     },
     educationalLevel: 'beginner',
     inLanguage: siteConfig.advanced?.locale || 'zh-CN',
