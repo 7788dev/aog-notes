@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og'
 import siteConfig from '../../site.config'
 
-export const runtime = 'nodejs'
+export const dynamic = 'force-static'
 export const alt = siteConfig.title
 export const size = {
   width: 1200,
