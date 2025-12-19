@@ -97,8 +97,22 @@ export default function HomeClient({ initialCategories, initialNotes, version, c
     if (title) document.title = `${title} | ${config.name}`
   }, [config.name])
 
-  // 获取 basePath
-  const basePath = config.url_config?.basePath || ''
+  // 从 URL 推断 basePath（支持 GitHub Pages 等子路径部署）
+  const [basePath, setBasePath] = useState('')
+  
+  useEffect(() => {
+    // 检测 basePath：如果 URL 以 /xxx/ 开头且不是已知路由，则认为是 basePath
+    const pathname = window.location.pathname
+    const firstSegment = pathname.split('/').filter(Boolean)[0]
+    if (firstSegment && !['category', 'notes', 'favorites'].includes(firstSegment)) {
+      // 检查是否是分类或笔记的 slug
+      const isKnownRoute = categories.some(c => c.slug === firstSegment) || 
+                          allNotes.some(n => n.slug === firstSegment)
+      if (!isKnownRoute) {
+        setBasePath(`/${firstSegment}`)
+      }
+    }
+  }, [categories, allNotes])
 
   // 解析 URL 路径，支持多种格式
   const parseUrlPath = useCallback((path: string) => {
