@@ -59,7 +59,7 @@ const siteConfig: SiteConfig = {
 
   // ========== 社交链接 ==========
   social: {
-    github: 'https://github.com/your-username/aog-notes',
+    github: 'https://github.com/7788dev/aog-notes',
     // twitter: 'https://twitter.com/your-username',
     // email: 'your-email@example.com',
   },
@@ -67,7 +67,7 @@ const siteConfig: SiteConfig = {
   // ========== 页脚 ==========
   footer: {
     text: '© 2024 AOG Notes',
-    links: [{ name: 'GitHub', url: 'https://github.com/your-username/aog-notes' }],
+    links: [{ name: 'GitHub', url: 'https://github.com/7788dev/aog-notes' }],
     showPoweredBy: true,
   },
 

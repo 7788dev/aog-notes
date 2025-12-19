@@ -4,7 +4,7 @@
 
 **一个现代化、快速、美观的 Markdown 笔记框架，基于 Next.js 构建**
 
-[在线演示](https://your-demo-url.com) | [文档](https://your-docs-url.com) | [问题反馈](https://github.com/your-username/aog-notes/issues)
+[在线演示](https://your-demo-url.com) | [文档](https://your-docs-url.com) | [问题反馈](https://github.com/7788dev/aog-notes/issues)
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
@@ -15,7 +15,7 @@
 
 ---
 
-## ✨ 特性
+## 特性
 
 - **零配置启动** - 克隆项目，添加 Markdown 文件，即可拥有专业笔记网站
 - **极致性能** - 基于 Next.js 静态生成，首屏加载极快
@@ -30,11 +30,11 @@
 - **PWA 支持** - 可安装到桌面，支持离线访问
 - **国际化** - 支持中文/英文切换
 
-## 🚀 快速开始
+## 快速开始
 
 ```bash
 # 克隆项目
-git clone https://github.com/your-username/aog-notes.git
+git clone https://github.com/7788dev/aog-notes.git
 
 # 进入目录
 cd aog-notes
@@ -48,7 +48,7 @@ npm run dev
 
 打开 [http://localhost:3000](http://localhost:3000) 查看效果。
 
-## 📝 添加笔记
+## 添加笔记
 
 在 `data/` 目录下创建 Markdown 文件：
 
@@ -77,7 +77,7 @@ date: 2024-12-19
 # 正文内容
 ```
 
-## ⚙️ 配置
+## 配置
 
 编辑 `site.config.ts` 自定义网站：
 
@@ -113,11 +113,11 @@ const siteConfig = {
 }
 ```
 
-## 🌐 部署
+## 部署
 
 ### Vercel（推荐）
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/aog-notes)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/7788dev/aog-notes)
 
 ### Docker
 
@@ -133,7 +133,7 @@ npm run build
 # 输出在 `out/` 目录
 ```
 
-## 🛠 技术栈
+## 技术栈
 
 | 技术 | 说明 |
 |------|------|
@@ -143,7 +143,7 @@ npm run build
 | [React Markdown](https://github.com/remarkjs/react-markdown) | Markdown 渲染 |
 | [Prism](https://prismjs.com/) | 代码高亮 |
 
-## 📁 项目结构
+## 项目结构
 
 ```
 aog-notes/
@@ -158,7 +158,7 @@ aog-notes/
 └── package.json
 ```
 
-## 🤝 贡献
+## 贡献
 
 欢迎贡献代码！请随时提交 Pull Request。
 
@@ -168,7 +168,7 @@ aog-notes/
 4. 推送到分支 (`git push origin feature/amazing-feature`)
 5. 提交 Pull Request
 
-## 📄 许可证
+## 许可证
 
 本项目基于 MIT 许可证开源 - 查看 [LICENSE](LICENSE) 文件了解详情。
 
@@ -176,8 +176,8 @@ aog-notes/
 
 <div align="center">
 
-**如果这个项目对你有帮助，请给个 Star ⭐**
+**如果这个项目对你有帮助，请给个 Star**
 
-Made with ❤️
+Made with love
 
 </div>
