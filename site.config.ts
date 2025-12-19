@@ -66,7 +66,7 @@ const siteConfig: SiteConfig = {
 
   // ========== 页脚 ==========
   footer: {
-    text: '© 2024 AOG Notes',
+    copyright: 'AOG Notes',  // 版权名称，年份自动获取
     links: [{ name: 'GitHub', url: 'https://github.com/7788dev/aog-notes' }],
     showPoweredBy: true,
   },

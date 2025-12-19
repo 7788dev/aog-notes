@@ -78,7 +78,7 @@ export interface SiteConfig {
 
   // 页脚
   footer?: {
-    text?: string
+    copyright?: string  // 版权名称，年份自动获取
     links?: { name: string; url: string }[]
     showPoweredBy?: boolean
   }
