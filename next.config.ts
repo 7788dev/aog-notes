@@ -7,6 +7,9 @@ const deployConfig = siteConfig.deploy || {};
 // GitHub Pages 部署时设置环境变量 GITHUB_PAGES=true
 const isGitHubPages = process.env.GITHUB_PAGES === 'true';
 
+// GitHub Pages 默认禁用 PWA（可通过 ENABLE_PWA=true 强制启用）
+const isPwaDisabled = isGitHubPages && process.env.ENABLE_PWA !== 'true';
+
 // 计算 basePath
 // 优先级: NEXT_PUBLIC_BASE_PATH 环境变量 > GitHub Pages 自动检测 > site.config.ts 配置
 function getBasePath(): string {
@@ -100,6 +103,7 @@ const nextConfig: NextConfig = {
   // 环境变量传递给客户端
   env: {
     NEXT_PUBLIC_BASE_PATH: basePath,
+    NEXT_PUBLIC_DISABLE_PWA: isPwaDisabled ? 'true' : '',
   },
   
   // 图片优化配置

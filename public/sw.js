@@ -1,18 +1,17 @@
 const CACHE_NAME = 'aog-notes-v1'
-const STATIC_ASSETS = [
-  '/',
-  '/manifest.webmanifest',
-  '/icon-192.svg',
-  '/icon-512.svg',
-]
 
-// 安装 Service Worker
+// 动态获取 basePath（从 SW 的路径推断）
+const getBasePath = () => {
+  const swPath = self.location.pathname
+  // 如果 sw.js 在子路径下，如 /aog-notes/sw.js，则 basePath 为 /aog-notes
+  const match = swPath.match(/^(\/[^/]+)\/sw\.js$/)
+  return match ? match[1] : ''
+}
+
+const basePath = getBasePath()
+
+// 安装 Service Worker - 不预缓存，避免路径问题
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS)
-    })
-  )
   self.skipWaiting()
 })
 
@@ -45,11 +44,13 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        // 克隆响应用于缓存
-        const responseClone = response.clone()
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseClone)
-        })
+        // 只缓存成功的响应
+        if (response.ok) {
+          const responseClone = response.clone()
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone)
+          })
+        }
         return response
       })
       .catch(() => {
@@ -60,7 +61,7 @@ self.addEventListener('fetch', (event) => {
           }
           // 返回离线页面
           if (event.request.mode === 'navigate') {
-            return caches.match('/')
+            return caches.match(basePath + '/') || caches.match('/')
           }
           return new Response('Offline', { status: 503 })
         })

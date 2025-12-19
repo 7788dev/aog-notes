@@ -7,7 +7,10 @@ export const dynamic = 'force-static'
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
 export default function manifest(): MetadataRoute.Manifest {
-  if (!siteConfig.features.pwa) {
+  // GitHub Pages 部署时禁用 PWA
+  const isPwaEnabled = siteConfig.features.pwa && process.env.NEXT_PUBLIC_DISABLE_PWA !== 'true'
+  
+  if (!isPwaEnabled) {
     return {} as MetadataRoute.Manifest
   }
 

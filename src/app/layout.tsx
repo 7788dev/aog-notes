@@ -28,6 +28,9 @@ export const viewport: Viewport = {
 // 获取 basePath（用于静态资源路径）
 const staticBasePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
+// GitHub Pages 部署时禁用 PWA
+const isPwaEnabled = siteConfig.features.pwa && process.env.NEXT_PUBLIC_DISABLE_PWA !== 'true';
+
 // 获取 favicon 配置（需要包含 basePath）
 const faviconPath = `${staticBasePath}${siteConfig.favicon || '/logo.svg'}`;
 
@@ -38,7 +41,7 @@ export const metadata: Metadata = siteConfig.seo.enabled ? {
     shortcut: faviconPath,
     apple: faviconPath,
   },
-  ...(siteConfig.features.pwa ? { manifest: '/manifest.webmanifest' } : {}),
+  ...(isPwaEnabled ? { manifest: '/manifest.webmanifest' } : {}),
   metadataBase: new URL(siteConfig.url),
   title: {
     default: siteConfig.title,
@@ -132,10 +135,10 @@ export default function RootLayout({
         )}
         
         {/* PWA Icons */}
-        {siteConfig.features.pwa && (
+        {isPwaEnabled && (
           <>
             <link rel="apple-touch-icon" href={`${staticBasePath}/icon-192.svg`} />
-            <meta name="apple-mobile-web-app-capable" content="yes" />
+            <meta name="mobile-web-app-capable" content="yes" />
             <meta name="apple-mobile-web-app-status-bar-style" content="default" />
           </>
         )}
@@ -167,7 +170,7 @@ export default function RootLayout({
         )}
         
         {/* PWA Service Worker */}
-        {siteConfig.features.pwa && (
+        {isPwaEnabled && (
           <script
             dangerouslySetInnerHTML={{
               __html: `
