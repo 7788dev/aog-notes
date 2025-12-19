@@ -117,20 +117,51 @@ const siteConfig = {
 
 ### Vercel（推荐）
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/7788dev/aog-notes)
+1. Fork 本仓库到你的 GitHub 账号
+2. 修改 `site.config.ts` 配置文件（网站名称、URL 等）
+3. 登录 [Vercel](https://vercel.com)，点击 "New Project"
+4. 导入你 Fork 的仓库
+5. 点击 "Deploy" 即可
 
-### Docker
+### GitHub Pages
 
-```bash
-docker build -t aog-notes .
-docker run -p 3000:3000 aog-notes
+1. Fork 本仓库
+2. 进入仓库 Settings > Pages
+3. Source 选择 "GitHub Actions"
+4. 在 `.github/workflows/` 目录创建部署工作流（见下方示例）
+5. 推送代码后自动部署
+
+```yaml
+# .github/workflows/deploy.yml
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npm run build
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out
 ```
+
+注意：使用 GitHub Pages 需要在 `next.config.ts` 中配置 `output: 'export'`。
 
 ### 静态导出
 
 ```bash
 npm run build
-# 输出在 `out/` 目录
+# 输出在 `out/` 目录，可部署到任意静态托管服务
 ```
 
 ## 技术栈
