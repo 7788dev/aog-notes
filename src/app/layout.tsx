@@ -71,24 +71,11 @@ export const metadata: Metadata = siteConfig.seo.enabled ? {
     locale: siteConfig.advanced?.locale || "zh-CN",
     url: siteConfig.url,
     siteName: siteConfig.name,
-    ...(siteConfig.seo.ogImage !== false ? {
-      images: [
-        {
-          url: `${siteConfig.url}${staticBasePath}/og-image.svg`,
-          width: 1200,
-          height: 630,
-          alt: siteConfig.title,
-        }
-      ],
-    } : {}),
   },
   twitter: {
     card: 'summary_large_image',
     title: siteConfig.title,
     description: siteConfig.description,
-    ...(siteConfig.seo.ogImage !== false ? {
-      images: [`${siteConfig.url}${staticBasePath}/og-image.svg`],
-    } : {}),
   },
   alternates: {
     canonical: siteConfig.url,
