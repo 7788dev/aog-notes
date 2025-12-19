@@ -4,7 +4,7 @@
 
 **一个现代化、快速、美观的 Markdown 笔记框架，基于 Next.js 构建**
 
-[在线演示](https://your-demo-url.com) | [文档](https://your-docs-url.com) | [问题反馈](https://github.com/7788dev/aog-notes/issues)
+[在线演示](https://7788dev.github.io/aog-notes/) | [文档](https://7788dev.github.io/aog-notes/) | [问题反馈](https://github.com/7788dev/aog-notes/issues)
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
@@ -12,6 +12,16 @@
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
 </div>
+
+---
+
+## 预览
+
+### 首页
+![首页](docs/screenshots/home.png)
+
+### 文章详情 & 深色模式
+![深色模式](docs/screenshots/dark-mode.png)
 
 ---
 

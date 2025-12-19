@@ -25,8 +25,16 @@ export const viewport: Viewport = {
   ],
 }
 
+// 获取 favicon 配置
+const faviconPath = siteConfig.favicon || '/logo.svg';
+
 // SEO 元数据（根据配置决定是否启用）
 export const metadata: Metadata = siteConfig.seo.enabled ? {
+  icons: {
+    icon: faviconPath,
+    shortcut: faviconPath,
+    apple: faviconPath,
+  },
   ...(siteConfig.features.pwa ? { manifest: '/manifest.webmanifest' } : {}),
   metadataBase: new URL(siteConfig.url),
   title: {
@@ -57,20 +65,24 @@ export const metadata: Metadata = siteConfig.seo.enabled ? {
     locale: siteConfig.advanced?.locale || "zh-CN",
     url: siteConfig.url,
     siteName: siteConfig.name,
-    images: [
-      {
-        url: `${siteConfig.url}/og-image.svg`,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.title,
-      }
-    ],
+    ...(siteConfig.seo.ogImage !== false ? {
+      images: [
+        {
+          url: `${siteConfig.url}/og-image.svg`,
+          width: 1200,
+          height: 630,
+          alt: siteConfig.title,
+        }
+      ],
+    } : {}),
   },
   twitter: {
     card: 'summary_large_image',
     title: siteConfig.title,
     description: siteConfig.description,
-    images: [`${siteConfig.url}/og-image.svg`],
+    ...(siteConfig.seo.ogImage !== false ? {
+      images: [`${siteConfig.url}/og-image.svg`],
+    } : {}),
   },
   alternates: {
     canonical: siteConfig.url,
@@ -81,6 +93,10 @@ export const metadata: Metadata = siteConfig.seo.enabled ? {
 } : {
   title: siteConfig.title,
   robots: 'noindex, nofollow',
+  icons: {
+    icon: faviconPath,
+    shortcut: faviconPath,
+  },
 };
 
 // 结构化数据

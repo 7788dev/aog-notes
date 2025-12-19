@@ -13,8 +13,9 @@ export interface SiteConfig {
   // 品牌
   logo?: {
     text?: string
-    icon?: string
+    image?: string // Logo 图片路径，如 '/logo.svg'
   }
+  favicon?: string // Favicon 路径，如 '/logo.svg'
   themeColor: string
 
   // SEO 配置
@@ -25,6 +26,7 @@ export interface SiteConfig {
     robots?: string
     googleVerification?: string
     baiduVerification?: string
+    ogImage?: boolean // 是否启用 Open Graph 图片
   }
 
   // 功能开关
@@ -32,38 +34,11 @@ export interface SiteConfig {
     search: boolean
     favorites: boolean
     darkMode: boolean
-    toc: boolean
-    codeLineNumbers: boolean
     articleNav: boolean
-    breadcrumb: boolean
-    rss: boolean           // RSS 订阅
-    readingTime: boolean   // 阅读时间估算
-    tags: boolean          // 标签系统
-    pwa: boolean           // PWA 支持
-  }
-
-  // 评论系统
-  comments?: {
-    enabled: boolean
-    provider: 'giscus' | 'utterances' | 'disqus'
-    // Giscus 配置
-    giscus?: {
-      repo: string
-      repoId: string
-      category: string
-      categoryId: string
-      mapping?: 'pathname' | 'url' | 'title'
-      theme?: string
-    }
-    // Utterances 配置
-    utterances?: {
-      repo: string
-      theme?: string
-    }
-    // Disqus 配置
-    disqus?: {
-      shortname: string
-    }
+    rss: boolean // RSS 订阅
+    readingTime: boolean // 阅读时间估算
+    tags: boolean // 标签系统
+    pwa: boolean // PWA 支持
   }
 
   // 笔记目录
@@ -78,7 +53,7 @@ export interface SiteConfig {
 
   // 页脚
   footer?: {
-    copyright?: string  // 版权名称，年份自动获取
+    copyright?: string // 版权名称，年份自动获取
     links?: { name: string; url: string }[]
     showPoweredBy?: boolean
   }
@@ -111,8 +86,6 @@ export interface SiteConfig {
   // 高级配置
   advanced?: {
     locale?: string
-    dateFormat?: string
-    notesPerPage?: number
-    wordsPerMinute?: number  // 阅读速度，用于计算阅读时间
+    wordsPerMinute?: number // 阅读速度，用于计算阅读时间
   }
 }

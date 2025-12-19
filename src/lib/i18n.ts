@@ -34,9 +34,6 @@ export interface I18nMessages {
   themeDark: string
   themeSystem: string
   
-  // 评论
-  comments: string
-  
   // 其他
   selectNote: string
   shortcutTip: string
@@ -73,8 +70,6 @@ const messages: Record<Locale, I18nMessages> = {
     themeDark: '深色',
     themeSystem: '跟随系统',
     
-    comments: '评论',
-    
     selectNote: '选择笔记查看详情',
     shortcutTip: '快捷键: ↑↓ 切换 · Esc 返回',
     poweredBy: '由 AOG Notes 驱动',
@@ -107,8 +102,6 @@ const messages: Record<Locale, I18nMessages> = {
     themeLight: 'Light',
     themeDark: 'Dark',
     themeSystem: 'System',
-    
-    comments: 'Comments',
     
     selectNote: 'Select a note to view',
     shortcutTip: 'Shortcuts: ↑↓ Navigate · Esc Back',

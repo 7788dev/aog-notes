@@ -182,5 +182,6 @@ export function getAllTags(): { name: string; count: number }[] {
 export function getNotesByTag(tag: string): Note[] {
   return loadAllNotes()
     .filter(note => note.tags?.includes(tag))
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .map(({ _file, _folder, ...rest }) => rest)
 }

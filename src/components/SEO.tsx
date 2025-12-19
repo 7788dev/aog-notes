@@ -79,6 +79,11 @@ export default function SEO({ article, breadcrumbs, faqs }: SEOProps) {
         { property: 'og:type', content: 'article' },
       ]
       
+      // 如果启用了 OG 图片
+      if (siteConfig.seo.ogImage !== false) {
+        ogTags.push({ property: 'og:image', content: `${SITE_URL}/og-image.svg` })
+      }
+      
       ogTags.forEach(({ property, content }) => {
         let tag = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement
         if (!tag) {
@@ -116,7 +121,7 @@ export default function SEO({ article, breadcrumbs, faqs }: SEOProps) {
     headline: article.title,
     description: article.description,
     url: `${SITE_URL}/notes/${article.slug}`,
-    image: `${SITE_URL}/og-image.svg`,
+    ...(siteConfig.seo.ogImage !== false ? { image: `${SITE_URL}/og-image.svg` } : {}),
     author: {
       '@type': 'Organization',
       name: SITE_NAME,

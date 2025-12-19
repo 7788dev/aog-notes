@@ -123,6 +123,7 @@ export function generateCategorySlug(folderName: string): string {
 /**
  * 生成笔记 slug
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function generateNoteSlug(filename: string, options?: {
   categorySlug?: string
   date?: Date

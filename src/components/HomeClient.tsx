@@ -7,7 +7,6 @@ import { getFavorites, toggleFavorite, getTheme, setTheme, type Theme } from '@/
 import { SearchEngine } from '@/lib/search'
 import { generateFavoritesUrl } from '@/lib/url'
 import { getMessages } from '@/lib/i18n'
-import Comments from '@/components/Comments'
 import EmptyState from '@/components/EmptyState'
 import { NoteListSkeleton } from '@/components/Skeleton'
 import type { SiteConfig } from '@/types/config'
@@ -199,20 +198,10 @@ export default function HomeClient({ initialCategories, initialNotes, version, c
     }
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
-  }, [allNotes, categories, parseUrlPath])
+  }, [allNotes, categories, parseUrlPath, basePath])
 
-  useEffect(() => {
-    if (config.features.favorites) setFavorites(getFavorites())
-    if (config.features.darkMode) {
-      const savedTheme = getTheme()
-      setThemeState(savedTheme)
-      applyThemeClass(savedTheme)
-    }
-    // 模拟初始加载完成
-    setIsLoading(false)
-  }, [config.features.favorites, config.features.darkMode])
-
-  const applyThemeClass = (t: Theme) => {
+  const applyThemeClass = useCallback((t: Theme) => {
+    if (typeof window === 'undefined') return
     const isDark = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
     // 临时禁用过渡动画防止抖动
     document.documentElement.classList.add('theme-transition')
@@ -223,13 +212,37 @@ export default function HomeClient({ initialCategories, initialNotes, version, c
         document.documentElement.classList.remove('theme-transition')
       })
     })
-  }
+  }, [])
 
-  const handleThemeChange = (t: Theme) => {
+  // 客户端挂载标记
+  const [mounted, setMounted] = useState(false)
+  
+  // 初始化收藏和主题（客户端挂载后执行）
+  useEffect(() => {
+    setMounted(true)
+    
+    // 初始化收藏
+    if (config.features.favorites) {
+      const savedFavorites = getFavorites()
+      if (savedFavorites.length > 0) {
+        setFavorites(savedFavorites)
+      }
+    }
+    // 初始化主题
+    if (config.features.darkMode) {
+      const savedTheme = getTheme()
+      setThemeState(savedTheme)
+      applyThemeClass(savedTheme)
+    }
+    setIsLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const handleThemeChange = useCallback((t: Theme) => {
     setThemeState(t)
     setTheme(t)
     applyThemeClass(t)
-  }
+  }, [applyThemeClass])
 
   const searchEngine = useMemo(() => {
     if (!config.features.search) return null
@@ -402,10 +415,6 @@ export default function HomeClient({ initialCategories, initialNotes, version, c
     }
   }, [selectedNote, categories])
 
-  // 动态样式
-  const activeStyle = { backgroundColor: `${themeColor}10`, color: themeColor, borderColor: themeColor }
-  const hoverStyle = `hover:text-[${themeColor}]`
-
   return (
     <div className="h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors">
       <SEO article={seoData.article} breadcrumbs={seoData.breadcrumbs} />
@@ -423,9 +432,14 @@ export default function HomeClient({ initialCategories, initialNotes, version, c
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden p-2 -ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
           </button>
-          <div className="w-8 h-8 theme-bg flex items-center justify-center rounded">
-            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
-          </div>
+          {config.logo?.image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={config.logo.image} alt={config.name} className="w-8 h-8 rounded" />
+          ) : (
+            <div className="w-8 h-8 theme-bg flex items-center justify-center rounded">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+            </div>
+          )}
           <span className="font-semibold text-gray-900 dark:text-gray-100 hidden sm:block">{config.logo?.text || config.name}</span>
         </div>
         {config.features.search && (
@@ -439,7 +453,7 @@ export default function HomeClient({ initialCategories, initialNotes, version, c
         )}
         <div className="flex items-center gap-2">
           <span className="text-xs text-gray-400 hidden sm:block">{version}</span>
-          {config.features.darkMode && (
+          {config.features.darkMode && mounted && (
             <button onClick={() => handleThemeChange(theme === 'dark' ? 'light' : theme === 'light' ? 'system' : 'dark')} className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" title={`当前: ${theme === 'dark' ? '深色' : theme === 'light' ? '浅色' : '跟随系统'}`}>
               {theme === 'dark' ? <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
                : theme === 'light' ? <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
@@ -655,8 +669,6 @@ export default function HomeClient({ initialCategories, initialNotes, version, c
                 )
               })()}
               
-              {/* 评论区 */}
-              <Comments config={config} slug={selectedNote.slug} title={selectedNote.title} />
             </div>
           ) : (
             <div className="h-full flex items-center justify-center">

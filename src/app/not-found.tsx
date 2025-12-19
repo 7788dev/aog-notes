@@ -5,9 +5,8 @@ import siteConfig from '../../site.config'
 export default function NotFound() {
   const categories = loadCategories()
   
-  // 随机选择最多 4 个分类
-  const shuffled = [...categories].sort(() => Math.random() - 0.5)
-  const recommendedCategories = shuffled.slice(0, 4)
+  // 选择前 4 个分类作为推荐
+  const recommendedCategories = categories.slice(0, 4)
   
   const themeColor = siteConfig.themeColor
 
