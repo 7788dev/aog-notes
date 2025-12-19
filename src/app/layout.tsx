@@ -93,6 +93,9 @@ const organizationSchema = siteConfig.seo.enabled ? {
   sameAs: Object.values(siteConfig.social || {}).filter(Boolean),
 } : null;
 
+// 获取 basePath（GitHub Pages 需要）
+const basePath = process.env.GITHUB_PAGES === 'true' ? '/aog-notes' : (siteConfig.url_config?.basePath || '');
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -109,13 +112,13 @@ export default function RootLayout({
         
         {/* RSS Feed */}
         {siteConfig.features.rss && (
-          <link rel="alternate" type="application/rss+xml" title={`${siteConfig.name} RSS Feed`} href="/feed.xml" />
+          <link rel="alternate" type="application/rss+xml" title={`${siteConfig.name} RSS Feed`} href={`${basePath}/feed.xml`} />
         )}
         
         {/* PWA Icons */}
         {siteConfig.features.pwa && (
           <>
-            <link rel="apple-touch-icon" href="/icon-192.svg" />
+            <link rel="apple-touch-icon" href={`${basePath}/icon-192.svg`} />
             <meta name="apple-mobile-web-app-capable" content="yes" />
             <meta name="apple-mobile-web-app-status-bar-style" content="default" />
           </>
@@ -154,7 +157,7 @@ export default function RootLayout({
               __html: `
                 if ('serviceWorker' in navigator) {
                   window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/sw.js')
+                    navigator.serviceWorker.register('${basePath}/sw.js')
                   })
                 }
               `,

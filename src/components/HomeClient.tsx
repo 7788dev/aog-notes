@@ -97,10 +97,21 @@ export default function HomeClient({ initialCategories, initialNotes, version, c
     if (title) document.title = `${title} | ${config.name}`
   }, [config.name])
 
+  // 获取 basePath
+  const basePath = config.url_config?.basePath || ''
+
   // 解析 URL 路径，支持多种格式
   const parseUrlPath = useCallback((path: string) => {
-    // 移除可能的后缀
-    const cleanPath = path.replace(/\.html$/, '').replace(/\/$/, '')
+    // 移除可能的后缀和 basePath
+    let cleanPath = path.replace(/\.html$/, '').replace(/\/$/, '')
+    if (basePath && cleanPath.startsWith(basePath)) {
+      cleanPath = cleanPath.slice(basePath.length) || '/'
+    }
+    
+    // 首页
+    if (cleanPath === '' || cleanPath === '/') {
+      return { type: 'home' as const }
+    }
     
     // 笔记页 - 通过 URL 匹配
     const note = allNotes.find(n => {
@@ -125,11 +136,6 @@ export default function HomeClient({ initialCategories, initialNotes, version, c
       return { type: 'favorites' as const }
     }
     
-    // 首页
-    if (cleanPath === '' || cleanPath === '/') {
-      return { type: 'home' as const }
-    }
-    
     // 兼容旧格式 /notes/slug
     if (cleanPath.startsWith('/notes/')) {
       const slug = decodeURIComponent(cleanPath.slice(7))
@@ -149,7 +155,7 @@ export default function HomeClient({ initialCategories, initialNotes, version, c
     }
     
     return { type: 'unknown' as const }
-  }, [allNotes, categories])
+  }, [allNotes, categories, basePath])
 
   useEffect(() => {
     const parseUrl = () => {
@@ -178,15 +184,20 @@ export default function HomeClient({ initialCategories, initialNotes, version, c
         return
       }
       
-      if (result.type === 'unknown' && path !== '/' && path !== '') {
-        notFound()
+      // 只有在确实找不到匹配时才显示 404
+      if (result.type === 'unknown') {
+        const isBasePath = basePath && (path === basePath || path === basePath + '/')
+        if (!isBasePath && path !== '/' && path !== '') {
+          notFound()
+        }
       }
     }
     parseUrl()
     const handlePopState = () => {
       const path = window.location.pathname
       const result = parseUrlPath(path)
-      if (result.type === 'home' || path === '/') {
+      const isHome = result.type === 'home' || path === '/' || (basePath && (path === basePath || path === basePath + '/'))
+      if (isHome) {
         setSelectedNote(null)
         setActiveCategory(null)
         setShowList(true)
