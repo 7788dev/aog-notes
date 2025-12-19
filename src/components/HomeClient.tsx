@@ -668,7 +668,7 @@ export default function HomeClient({ initialCategories, initialNotes, version, c
       {config.footer && (
         <footer className="px-4 py-2 flex-shrink-0">
           <div className="flex items-center justify-center gap-3 text-[11px] text-gray-300 dark:text-gray-600">
-            {config.footer.text && <span>{config.footer.text}</span>}
+            {config.footer.text && <span>{config.footer.text.replace(/\d{4}/, String(new Date().getFullYear()))}</span>}
             {config.footer.links?.map((link, i) => (
               <a key={i} href={link.url} target="_blank" rel="noopener noreferrer" className="hover:text-gray-400 dark:hover:text-gray-500 transition-colors">{link.name}</a>
             ))}
