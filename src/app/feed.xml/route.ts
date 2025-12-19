@@ -3,6 +3,9 @@ import siteConfig from '../../../site.config'
 
 export const dynamic = 'force-static'
 
+// 获取 basePath
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
+
 export async function GET() {
   if (!siteConfig.features.rss) {
     return new Response('RSS feed is disabled', { status: 404 })
@@ -10,7 +13,7 @@ export async function GET() {
 
   const notes = loadAllNotes()
   const categories = loadCategories()
-  const baseUrl = siteConfig.url.replace(/\/$/, '')
+  const baseUrl = siteConfig.url.replace(/\/$/, '') + basePath
 
   const rssItems = notes.map(note => {
     const category = categories.find(c => c.id === note.category_id)
@@ -39,7 +42,7 @@ export async function GET() {
     <description><![CDATA[${siteConfig.description}]]></description>
     <language>${siteConfig.advanced?.locale || 'zh-CN'}</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-    <atom:link href="${baseUrl}/feed.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="${siteConfig.url.replace(/\/$/, '')}${basePath}/feed.xml" rel="self" type="application/rss+xml"/>
     <generator>AOG Notes</generator>
     ${rssItems}
   </channel>

@@ -3,8 +3,8 @@ import siteConfig from '../../site.config'
 
 export const dynamic = 'force-static'
 
-// 获取 basePath
-const basePath = process.env.GITHUB_PAGES === 'true' ? '/aog-notes' : (siteConfig.url_config?.basePath || '')
+// 获取 basePath（使用环境变量，由 next.config.ts 注入）
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
 export default function manifest(): MetadataRoute.Manifest {
   if (!siteConfig.features.pwa) {

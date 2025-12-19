@@ -20,14 +20,14 @@ function calculatePriority(categoryName: string, isCategory: boolean): number {
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = siteConfig.url.replace(/\/$/, '')
-  const basePath = getBasePathConfig()
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || getBasePathConfig()
+  const baseUrl = siteConfig.url.replace(/\/$/, '') + basePath
   const now = new Date()
   
   // 首页 - 最高优先级
   const routes: MetadataRoute.Sitemap = [
     {
-      url: `${baseUrl}${basePath || '/'}`,
+      url: baseUrl || siteConfig.url,
       lastModified: now,
       changeFrequency: 'daily',
       priority: 1,

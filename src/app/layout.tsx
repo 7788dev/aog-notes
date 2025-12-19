@@ -25,8 +25,11 @@ export const viewport: Viewport = {
   ],
 }
 
-// 获取 favicon 配置
-const faviconPath = siteConfig.favicon || '/logo.svg';
+// 获取 basePath（用于静态资源路径）
+const staticBasePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
+// 获取 favicon 配置（需要包含 basePath）
+const faviconPath = `${staticBasePath}${siteConfig.favicon || '/logo.svg'}`;
 
 // SEO 元数据（根据配置决定是否启用）
 export const metadata: Metadata = siteConfig.seo.enabled ? {
@@ -68,7 +71,7 @@ export const metadata: Metadata = siteConfig.seo.enabled ? {
     ...(siteConfig.seo.ogImage !== false ? {
       images: [
         {
-          url: `${siteConfig.url}/og-image.svg`,
+          url: `${siteConfig.url}${staticBasePath}/og-image.svg`,
           width: 1200,
           height: 630,
           alt: siteConfig.title,
@@ -81,7 +84,7 @@ export const metadata: Metadata = siteConfig.seo.enabled ? {
     title: siteConfig.title,
     description: siteConfig.description,
     ...(siteConfig.seo.ogImage !== false ? {
-      images: [`${siteConfig.url}/og-image.svg`],
+      images: [`${siteConfig.url}${staticBasePath}/og-image.svg`],
     } : {}),
   },
   alternates: {
@@ -105,12 +108,9 @@ const organizationSchema = siteConfig.seo.enabled ? {
   '@type': 'Organization',
   name: siteConfig.name,
   url: siteConfig.url,
-  logo: `${siteConfig.url}/logo.svg`,
+  logo: `${siteConfig.url}${staticBasePath}/logo.svg`,
   sameAs: Object.values(siteConfig.social || {}).filter(Boolean),
 } : null;
-
-// 获取 basePath（GitHub Pages 需要）
-const basePath = process.env.GITHUB_PAGES === 'true' ? '/aog-notes' : (siteConfig.url_config?.basePath || '');
 
 export default function RootLayout({
   children,
@@ -128,13 +128,13 @@ export default function RootLayout({
         
         {/* RSS Feed */}
         {siteConfig.features.rss && (
-          <link rel="alternate" type="application/rss+xml" title={`${siteConfig.name} RSS Feed`} href={`${basePath}/feed.xml`} />
+          <link rel="alternate" type="application/rss+xml" title={`${siteConfig.name} RSS Feed`} href={`${staticBasePath}/feed.xml`} />
         )}
         
         {/* PWA Icons */}
         {siteConfig.features.pwa && (
           <>
-            <link rel="apple-touch-icon" href={`${basePath}/icon-192.svg`} />
+            <link rel="apple-touch-icon" href={`${staticBasePath}/icon-192.svg`} />
             <meta name="apple-mobile-web-app-capable" content="yes" />
             <meta name="apple-mobile-web-app-status-bar-style" content="default" />
           </>
@@ -173,7 +173,7 @@ export default function RootLayout({
               __html: `
                 if ('serviceWorker' in navigator) {
                   window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('${basePath}/sw.js')
+                    navigator.serviceWorker.register('${staticBasePath}/sw.js')
                   })
                 }
               `,
