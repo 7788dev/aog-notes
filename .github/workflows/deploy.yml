@@ -34,6 +34,7 @@ jobs:
         run: npm run build
         env:
           GITHUB_PAGES: 'true'
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
       - name: Add 404.html for SPA routing
         run: cp out/index.html out/404.html

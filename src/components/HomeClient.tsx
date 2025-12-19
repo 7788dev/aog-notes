@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
-import { notFound } from 'next/navigation'
 import NoteReader from '@/components/NoteReader'
 import SEO from '@/components/SEO'
 import { getFavorites, toggleFavorite, getTheme, setTheme, type Theme } from '@/lib/storage'
@@ -97,22 +96,8 @@ export default function HomeClient({ initialCategories, initialNotes, version, c
     if (title) document.title = `${title} | ${config.name}`
   }, [config.name])
 
-  // 从 URL 推断 basePath（支持 GitHub Pages 等子路径部署）
-  const [basePath, setBasePath] = useState('')
-  
-  useEffect(() => {
-    // 检测 basePath：如果 URL 以 /xxx/ 开头且不是已知路由，则认为是 basePath
-    const pathname = window.location.pathname
-    const firstSegment = pathname.split('/').filter(Boolean)[0]
-    if (firstSegment && !['category', 'notes', 'favorites'].includes(firstSegment)) {
-      // 检查是否是分类或笔记的 slug
-      const isKnownRoute = categories.some(c => c.slug === firstSegment) || 
-                          allNotes.some(n => n.slug === firstSegment)
-      if (!isKnownRoute) {
-        setBasePath(`/${firstSegment}`)
-      }
-    }
-  }, [categories, allNotes])
+  // 使用构建时注入的 basePath（由 next.config.ts 设置）
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
   // 解析 URL 路径，支持多种格式
   const parseUrlPath = useCallback((path: string) => {
@@ -196,14 +181,6 @@ export default function HomeClient({ initialCategories, initialNotes, version, c
       if (result.type === 'favorites') {
         setShowFavorites(true)
         return
-      }
-      
-      // 只有在确实找不到匹配时才显示 404
-      if (result.type === 'unknown') {
-        const isBasePath = basePath && (path === basePath || path === basePath + '/')
-        if (!isBasePath && path !== '/' && path !== '') {
-          notFound()
-        }
       }
     }
     parseUrl()

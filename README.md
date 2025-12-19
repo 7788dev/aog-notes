@@ -52,37 +52,17 @@
 
 ### GitHub Pages
 
+本项目已内置 GitHub Actions 工作流，会自动从仓库名获取 basePath 并部署。
+
 1. Fork 本仓库
-2. 进入仓库 Settings > Pages
-3. Source 选择 "GitHub Actions"
-4. 在 `.github/workflows/` 目录创建部署工作流（见下方示例）
+2. 修改 `site.config.ts` 配置文件
+3. 进入仓库 Settings > Pages
+4. Source 选择 "GitHub Actions"
 5. 推送代码后自动部署
 
-```yaml
-# .github/workflows/deploy.yml
-name: Deploy to GitHub Pages
-
-on:
-  push:
-    branches: [main]
-
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - run: npm ci
-      - run: npm run build
-      - uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
-```
-
-注意：使用 GitHub Pages 需要在 `next.config.ts` 中配置 `output: 'export'`。
+basePath 会自动设置：
+- 仓库 `username/my-notes` → 访问地址 `https://username.github.io/my-notes`
+- 仓库 `username/username.github.io` → 访问地址 `https://username.github.io`
 
 ### 静态导出
 

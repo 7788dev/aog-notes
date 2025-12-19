@@ -84,8 +84,16 @@ export function removeSuffix(path: string): string {
 
 /**
  * 获取基础路径前缀
+ * 优先使用构建时注入的环境变量，确保客户端和服务端一致
  */
 function getBasePath(): string {
+  // 优先使用环境变量（构建时由 next.config.ts 注入）
+  if (process.env.NEXT_PUBLIC_BASE_PATH) {
+    const bp = process.env.NEXT_PUBLIC_BASE_PATH
+    return bp.startsWith('/') ? bp : `/${bp}`
+  }
+  
+  // 回退到配置文件
   const base = urlConfig.basePath || ''
   if (!base) return ''
   return base.startsWith('/') ? base : `/${base}`

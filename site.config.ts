@@ -84,9 +84,16 @@ const siteConfig: SiteConfig = {
     trailingHtml: false,       // /article.html
     trailingSlash: false,      // /article/
     removeNumberPrefix: true,  // 01-快速开始 -> 快速开始
-    basePath: '',              // 路径前缀如 /docs
+    basePath: '',              // 路径前缀如 /docs（Vercel 部署时使用）
     lowercase: false,
     slugify: true,
+  },
+
+  // ========== 部署配置 ==========
+  deploy: {
+    // GitHub Pages 部署时自动从仓库名获取 basePath
+    // 例如仓库 username/my-notes 会自动设置 basePath 为 /my-notes
+    githubPagesAutoBasePath: true,
   },
 
   // ========== 高级配置 ==========

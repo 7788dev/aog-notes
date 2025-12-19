@@ -101,6 +101,13 @@ export interface SiteConfig {
     slugify?: boolean
   }
 
+  // 部署配置
+  deploy?: {
+    // GitHub Pages 部署时自动从 GITHUB_REPOSITORY 获取仓库名作为 basePath
+    // 设为 true 启用自动检测，设为 false 禁用
+    githubPagesAutoBasePath?: boolean
+  }
+
   // 高级配置
   advanced?: {
     locale?: string

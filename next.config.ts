@@ -2,10 +2,36 @@ import type { NextConfig } from "next";
 import siteConfig from "./site.config";
 
 const urlConfig = siteConfig.url_config || {};
+const deployConfig = siteConfig.deploy || {};
 
 // GitHub Pages 部署时设置环境变量 GITHUB_PAGES=true
 const isGitHubPages = process.env.GITHUB_PAGES === 'true';
-const basePath = isGitHubPages ? '/aog-notes' : (urlConfig.basePath || '');
+
+// 计算 basePath
+// 优先级: NEXT_PUBLIC_BASE_PATH 环境变量 > GitHub Pages 自动检测 > site.config.ts 配置
+function getBasePath(): string {
+  // 1. 环境变量优先（支持手动覆盖）
+  if (process.env.NEXT_PUBLIC_BASE_PATH) {
+    const bp = process.env.NEXT_PUBLIC_BASE_PATH;
+    return bp.startsWith('/') ? bp : `/${bp}`;
+  }
+  
+  // 2. GitHub Pages 自动从仓库名获取
+  if (isGitHubPages && deployConfig.githubPagesAutoBasePath !== false) {
+    const repo = process.env.GITHUB_REPOSITORY; // 格式: owner/repo-name
+    if (repo) {
+      const repoName = repo.split('/')[1];
+      if (repoName) {
+        return `/${repoName}`;
+      }
+    }
+  }
+  
+  // 3. 使用配置文件中的 basePath
+  return urlConfig.basePath || '';
+}
+
+const basePath = getBasePath();
 
 // 生成重写规则
 function generateRewrites() {
@@ -70,6 +96,11 @@ const nextConfig: NextConfig = {
   
   // 基础路径配置
   ...(basePath ? { basePath } : {}),
+  
+  // 环境变量传递给客户端
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath,
+  },
   
   // 图片优化配置
   images: isGitHubPages ? { unoptimized: true } : {
