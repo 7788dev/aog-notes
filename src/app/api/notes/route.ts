@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import { loadAllNotes } from '@/lib/notes'
 import { SearchEngine } from '@/lib/search'
 
+export const dynamic = 'force-static'
+
 type NoteType = ReturnType<typeof loadAllNotes>[0]
 
 // 缓存搜索引擎实例

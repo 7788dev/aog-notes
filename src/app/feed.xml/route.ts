@@ -1,6 +1,8 @@
 import { loadAllNotes, loadCategories } from '@/lib/notes'
 import siteConfig from '../../../site.config'
 
+export const dynamic = 'force-static'
+
 export async function GET() {
   if (!siteConfig.features.rss) {
     return new Response('RSS feed is disabled', { status: 404 })

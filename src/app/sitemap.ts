@@ -3,6 +3,8 @@ import { loadCategories, loadAllNotes } from '@/lib/notes'
 import { getBasePathConfig } from '@/lib/url'
 import siteConfig from '../../site.config'
 
+export const dynamic = 'force-static'
+
 // 根据内容重要性计算优先级
 function calculatePriority(categoryName: string, isCategory: boolean): number {
   if (isCategory) {

@@ -1,6 +1,8 @@
 import type { MetadataRoute } from 'next'
 import siteConfig from '../../site.config'
 
+export const dynamic = 'force-static'
+
 export default function manifest(): MetadataRoute.Manifest {
   if (!siteConfig.features.pwa) {
     return {} as MetadataRoute.Manifest
