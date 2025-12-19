@@ -687,7 +687,7 @@ export default function HomeClient({ initialCategories, initialNotes, version, c
               <a key={i} href={link.url} target="_blank" rel="noopener noreferrer" className="hover:text-gray-400 dark:hover:text-gray-500 transition-colors">{link.name}</a>
             ))}
             {config.features.rss && (
-              <a href="/feed.xml" target="_blank" rel="noopener noreferrer" className="hover:text-gray-400 dark:hover:text-gray-500 transition-colors">RSS</a>
+              <a href={`${basePath}/feed.xml`} target="_blank" rel="noopener noreferrer" className="hover:text-gray-400 dark:hover:text-gray-500 transition-colors">RSS</a>
             )}
             {config.footer.showPoweredBy && (
               <span>Powered by <a href="https://github.com/7788dev/aog-notes" target="_blank" rel="noopener noreferrer" className="hover:text-gray-400 dark:hover:text-gray-500 transition-colors">AOG Notes</a></span>
