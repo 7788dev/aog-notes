@@ -30,88 +30,15 @@
 - **PWA 支持** - 可安装到桌面，支持离线访问
 - **国际化** - 支持中文/英文切换
 
-## 快速开始
+## 文档
 
-```bash
-# 克隆项目
-git clone https://github.com/7788dev/aog-notes.git
+详细使用文档请查看 [data/](./data) 目录：
 
-# 进入目录
-cd aog-notes
-
-# 安装依赖
-npm install
-
-# 启动开发服务器
-npm run dev
-```
-
-打开 [http://localhost:3000](http://localhost:3000) 查看效果。
-
-## 添加笔记
-
-在 `data/` 目录下创建 Markdown 文件：
-
-```
-data/
-├── 01-快速开始/
-│   ├── 01-介绍.md
-│   └── 02-安装.md
-└── 02-使用指南/
-    └── 01-写作指南.md
-```
-
-数字前缀控制排序，显示时会自动去除。
-
-### Frontmatter 支持
-
-```yaml
----
-title: 文章标题
-tags:
-  - JavaScript
-  - React
-date: 2024-12-19
----
-
-# 正文内容
-```
-
-## 配置
-
-编辑 `site.config.ts` 自定义网站：
-
-```typescript
-const siteConfig = {
-  name: '我的笔记',
-  title: '我的笔记 | 知识库',
-  description: '个人技术笔记与知识分享',
-  url: 'https://notes.example.com',
-  themeColor: '#16b777',
-  
-  features: {
-    search: true,      // 全文搜索
-    favorites: true,   // 收藏功能
-    darkMode: true,    // 深色模式
-    rss: true,         // RSS 订阅
-    readingTime: true, // 阅读时间
-    tags: true,        // 标签系统
-    pwa: true,         // PWA 支持
-  },
-  
-  // 评论系统（可选）
-  comments: {
-    enabled: true,
-    provider: 'giscus',
-    giscus: {
-      repo: 'your-username/your-repo',
-      repoId: 'R_xxxxx',
-      category: 'Announcements',
-      categoryId: 'DIC_xxxxx',
-    },
-  },
-}
-```
+- [介绍](./data/01-快速开始/01-介绍.md) - 项目简介与特性
+- [安装](./data/01-快速开始/02-安装.md) - 环境搭建与安装步骤
+- [配置](./data/01-快速开始/03-配置.md) - 完整配置说明
+- [写作指南](./data/02-使用指南/01-写作指南.md) - Markdown 写作规范
+- [部署指南](./data/03-部署/01-部署指南.md) - 各平台部署教程
 
 ## 部署
 
