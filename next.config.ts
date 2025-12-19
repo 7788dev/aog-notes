@@ -2,7 +2,10 @@ import type { NextConfig } from "next";
 import siteConfig from "./site.config";
 
 const urlConfig = siteConfig.url_config || {};
-const basePath = urlConfig.basePath || '';
+
+// GitHub Pages 部署时设置环境变量 GITHUB_PAGES=true
+const isGitHubPages = process.env.GITHUB_PAGES === 'true';
+const basePath = isGitHubPages ? '/aog-notes' : (urlConfig.basePath || '');
 
 // 生成重写规则
 function generateRewrites() {
@@ -53,6 +56,9 @@ function generateRewrites() {
 }
 
 const nextConfig: NextConfig = {
+  // GitHub Pages 需要静态导出
+  ...(isGitHubPages ? { output: 'export' } : {}),
+  
   // 启用压缩
   compress: true,
   
@@ -63,10 +69,10 @@ const nextConfig: NextConfig = {
   trailingSlash: urlConfig.trailingSlash || false,
   
   // 基础路径配置
-  ...(basePath ? { basePath: `/${basePath.replace(/^\/|\/$/g, '')}` } : {}),
+  ...(basePath ? { basePath } : {}),
   
   // 图片优化配置
-  images: {
+  images: isGitHubPages ? { unoptimized: true } : {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 60 * 60 * 24 * 30,
   },
